@@ -8,7 +8,10 @@ base = JSON::parse File.read("base.json")
 q1 = []
 q2 = []
 base.each { |key, val|
-    val["src"] = val["img"].match(/[^\\\/]+?\.png/).to_s.gsub(/%27/,"'")
+    val["src"] = val["img"].match(/[^\\\/]+?\.png/).to_s.gsub(/%27/, "'")
+    if val["name"] == "Slimed"
+        val["energy"] = "1"
+    end
 }
 File.write("base.json", base.to_json)
 

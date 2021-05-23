@@ -5,15 +5,22 @@ html {
     background-color: #013;
 }
 
-html, input, textarea, button {
+html, input, textarea, button, select, option {
     font-family: "Kreon", Garamond, serif;
     font-size: 1em;
 }
 
-button {
+select {
+    width: 100%;
+    /* height: 1.86em; */
+}
+
+button, input, select, option {
     color: #f9f9ff;
     border: 1px solid #457;
     background-color: #192949;
+}
+button {
     cursor: pointer;
 }
 button:hover {
@@ -23,10 +30,37 @@ button:hover {
 
 img.thumb {
     float: left;
+    clear: left;
+}
+.name {
+    display: inline;
+    margin-right: 2ch;
 }
 .result {
-    clear: left;
+    display: block;
+    overflow: hidden;
+}
+.energy-icon {
+    vertical-align: text-bottom;
+}
+.byline {
+    font-style: italic;
+}
+.keyword {
+    color: #FCE300;
+}
+.keyword.upgrade {
+    color: #7CFC00;
 }
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
+}
+.showDialogue {
+    padding: 5px;
+    display: flex;
+    justify-content: left;
+}
+.showDialogue button {
+    margin: 15px;
+    padding: 10px;
 }

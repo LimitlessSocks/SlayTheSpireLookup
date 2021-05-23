@@ -18,13 +18,48 @@
             <td><input type="text" id="cost"></td>
         </tr>
         <tr>
-            <td><label for="type">Card Type: </label></td>
-            <td><input type="text" id="type"></td>
-        </tr>
-        <tr>
             <td><label for="desc">Description: </label></td>
             <td><input type="text" id="desc"></td>
             <!-- <td><textarea id="desc"></textarea></td> -->
+        </tr>
+        <tr>
+            <td><label for="type">Type: </label></td>
+            <td><select id="type">
+                <option></option>
+                <option>Attack</option>
+                <option>Skill</option>
+                <option>Power</option>
+                <option>Curse</option>
+                <option>Status</option>
+            </select></td>
+            <!-- <td><input type="text" id="type"></td> -->
+        </tr>
+        <tr>
+            <td><label for="rarity">Rarity: </label></td>
+            <td><select id="rarity">
+                <option></option>
+                <option>Starter</option>
+                <option>Common</option>
+                <option>Uncommon</option>
+                <option>Rare</option>
+            </select></td>
+            <!-- <td><input type="text" id="type"></td> -->
+        </tr>
+        <tr>
+            <td><label for="color">Color: </label></td>
+            <td><select id="color">
+                <option value=""></option>
+                <option value="3">Red (Ironclad)</option>
+                <option value="4">Green (Silent)</option>
+                <option value="5">Blue (Defect)</option>
+                <option value="6">Purple (Watcher)</option>
+                <option value="2">Colorless</option>
+            </select></td>
+            <!-- <td><input type="text" id="type"></td> -->
+        </tr>
+        <tr>
+            <td><label for="autoShowAll">Auto Show All?</label></td>
+            <td><input type="checkbox" id="autoShowAll"></td>
         </tr>
     </table>
     <button id="submit">Submit</button>
