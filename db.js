@@ -135,7 +135,7 @@ const formatResult = (entity) => {
     c.querySelector(".rarity").textContent = entity.rarity;
     c.querySelector(".type").textContent = entity.type;
     let imthumb = c.querySelector("img.thumb");
-    imthumb.src = "./res/full/" + entity.src;
+    imthumb.src = "./res/min/" + entity.src;
     imthumb.width = 150;
     imthumb.title = "Internal id: " + entity.id;
     let enicon = c.querySelector("img.energy-icon");
