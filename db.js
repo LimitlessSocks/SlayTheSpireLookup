@@ -1,7 +1,14 @@
-const filterDatabase = (db, { name }) => {
+const filterDatabase = (db, { name, energy, type, description }) => {
     let res = [];
+    name = name.toLowerCase();
+    desc = description.toLowerCase();
+    type = type.toLowerCase();
     for(let [ id, card ] of Object.entries(db)) {
-        if(card.name.indexOf(name) !== -1) {
+        let hasName = !name || card.name.toLowerCase().indexOf(name) !== -1;
+        let hasCost = !energy || card.energy === energy;
+        let hasType = !type || card.type.toLowerCase() === type;
+        let hasDesc = !desc || card.description.toLowerCase().indexOf(desc) !== -1;
+        if(hasName && hasCost && hasType && hasDesc) {
             res.push(card);
         }
     }
@@ -29,11 +36,11 @@ const makeElement = (tag, opts = {}, children = []) => {
 };
 
 // const BASE_CARD_RESULT = document.createElement("div");
-const BASE_CARD_RESULT = makeElement("div", {}, [
-    makeElement("div", { classes: [ "name" ] }),
+const BASE_CARD_RESULT = makeElement("div", { classes: [ "result" ] }, [
+    makeElement("img", { classes: [ "thumb" ] }),
+    makeElement("h3", { classes: [ "name" ] }),
     makeElement("div", { classes: [ "energy" ] }),
     makeElement("div", { classes: [ "description" ] }),
-    makeElement("img", { classes: [ "thumb" ] }),
 ]);
 
 const formatResult = (entity) => {
@@ -43,7 +50,7 @@ const formatResult = (entity) => {
     c.querySelector(".description").textContent = entity.description;
     let imthumb = c.querySelector("img.thumb");
     imthumb.src = "./res/full/" + entity.src;
-    imthumb.width = 100;
+    imthumb.width = 150;
     return c;
 };
 
@@ -54,15 +61,36 @@ window.addEventListener("load", async function () {
     window.baseDb = baseDb;
     
     const name = document.getElementById("name");
+    const type = document.getElementById("type");
+    const cost = document.getElementById("cost");
+    const desc = document.getElementById("desc");
     const submit = document.getElementById("submit");
     const output = document.getElementById("output");
     
-    submit.addEventListener("click", function () {
-        let results = filterDatabase(baseDb, { name: name.value });
-        // result = result.map(formatResult);
+    const onChange = function () {
+        let results = filterDatabase(baseDb, { 
+            name: name.value,
+            energy: cost.value,
+            description: desc.value,
+            type: type.value,
+        });
         clearElement(output);
         for(let h of results.map(formatResult)) {
             output.appendChild(h);
         }
-    });
+    };
+    
+    submit.addEventListener("click", onChange);
+    
+    let inputEls = [ name, type, cost, desc ];
+    for(let el of inputEls) {
+        el.addEventListener("change", onChange);
+        if(el.tagName === "INPUT") {
+            el.addEventListener("keypress", function (el) {
+                if(el.key == "Enter") onChange();
+            });
+        }
+    }
+    
+    onChange();
 });

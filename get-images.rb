@@ -8,7 +8,7 @@ base = JSON::parse File.read("base.json")
 q1 = []
 q2 = []
 base.each { |key, val|
-    val["src"] = val["img"].match(/\w+?\.png/).to_s
+    val["src"] = val["img"].match(/[^\\\/]+?\.png/).to_s.gsub(/%27/,"'")
 }
 File.write("base.json", base.to_json)
 
@@ -19,13 +19,17 @@ current_this_second = 0
 total = base.size
 puts "Processing #{total} entries..."
 last_second = Time.now
+last_name = nil
 base.each.with_index(1) { |(key, val), i|
-    if to_redo.size
+    if to_redo.size != 0
         next unless to_redo.include? val["src"]
     end
     now = Time.now
     if now - last_second >= 1
         puts "Tick"
+        if now - last_second >= 5
+            puts "[!!] Unusual tick time: #{last_name}"
+        end
         last_second = now
         current_this_second = 0
     elsif current_this_second >= max_per_second
@@ -41,5 +45,6 @@ base.each.with_index(1) { |(key, val), i|
         file.close
     }
     current_this_second += 1
+    last_name = val["src"]
 }
 puts

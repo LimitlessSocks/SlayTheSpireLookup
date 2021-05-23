@@ -21,6 +21,10 @@ for(let table of document.querySelectorAll("table")) {
     }
     else {
       db[id].type = ["Status", "Curse"][i];
+      if(db[id].type === "Curse") {
+        db[id].description = db[id].rarity;
+        db[id].rarity = null;
+      }
     }
     id++;
   }

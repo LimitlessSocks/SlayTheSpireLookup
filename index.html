@@ -4,11 +4,32 @@
     <title>Slay the Spire Card Lookup</title>
     <meta charset="UTF-8">
     <script src="db.js"></script>
+    <link rel="STYLESHEET" href="lookup.css">
 </head>
 <body>
     <h1>Slay the Spire Card Lookup</h1>
-    <label for="name">Name: </label><input type="text" id="name">
+    <table>
+        <tr>
+            <td><label for="name">Name: </label></td>
+            <td><input type="text" id="name"></td>
+        </tr>
+        <tr>
+            <td><label for="cost">Energy: </label></td>
+            <td><input type="text" id="cost"></td>
+        </tr>
+        <tr>
+            <td><label for="type">Card Type: </label></td>
+            <td><input type="text" id="type"></td>
+        </tr>
+        <tr>
+            <td><label for="desc">Description: </label></td>
+            <td><input type="text" id="desc"></td>
+            <!-- <td><textarea id="desc"></textarea></td> -->
+        </tr>
+    </table>
     <button id="submit">Submit</button>
+    <button id="submit">Submit</button>
+    <h2>Results</h2>
     <div id="output"></div>
 </body>
 </html>
