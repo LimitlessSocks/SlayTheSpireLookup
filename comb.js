@@ -30,4 +30,4 @@ for(let table of document.querySelectorAll("table")) {
 }
 return db;
 })();
-copy(JSON.stringify(db))
+copy(JSON.stringify(db));

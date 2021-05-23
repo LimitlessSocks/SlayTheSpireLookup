@@ -42,7 +42,7 @@ const formatResult = (entity) => {
     c.querySelector(".energy").textContent = entity.energy;
     c.querySelector(".description").textContent = entity.description;
     let imthumb = c.querySelector("img.thumb");
-    imthumb.src = entity.img;
+    imthumb.src = "./res/full/" + entity.src;
     imthumb.width = 100;
     return c;
 };
