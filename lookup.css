@@ -36,9 +36,14 @@ img.thumb {
     display: inline;
     margin-right: 2ch;
 }
+#output {
+    /* display: flex; */
+}
 .result {
-    display: block;
+    display: inline-block;
     overflow: hidden;
+    width: 33%;
+    /* float: clear; */
 }
 .energy-icon {
     vertical-align: text-bottom;
@@ -51,6 +56,15 @@ img.thumb {
 }
 .keyword.upgrade {
     color: #7CFC00;
+}
+.keyword.common, .keyword.starter {
+    color: #A3A3A3;
+}
+.keyword.uncommon {
+    color: #8CECF2;
+}
+.keyword.rare {
+    color: #FECF52;
 }
 h1, h2, h3, h4, h5, h6 {
     margin: 0;

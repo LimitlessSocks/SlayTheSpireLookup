@@ -1,3 +1,10 @@
+const RARITIES = [
+    "Starter", "Common", "Uncommon", "Rare"
+];
+const TYPES = [
+    "Attack", "Skill", "Power", "Curse", "Status"
+];
+
 // expects target to be lowercase already
 const lowerCaseHas = (src, target) =>
     src !== null && src.toLowerCase().indexOf(target) !== -1;
@@ -78,28 +85,35 @@ const KEYWORDS = [
     "Weak",
     "Strength",
     "Ethereal",
-    "Exhaust",
+    "Exhausted", "Exhaust",
     "upgraded",
     "Fatal",
     "Poisoned", "Poison",
     "Innate",
+    "Evoked", "Evoke",
     "Channeled", "Channel",
     "Lightning", "Frost", "Dark", "Plasma",
     "Artifact",
     "Focus",
     "Wrath", "Calm",
     "Scry",
-    "Stance",
+    "Stances", "Stance",
     "Retain",
+    "Mark",
     // ""
     
     "Smite",
     "Wound",
     "Dazed",
+    "Insight",
 ];
 let KEYWORD_REGEX = new RegExp(
-    KEYWORDS.join("|") +
-    "|\\((Upgraded|X?\\+?\\d+)\\)",
+    [
+        KEYWORDS.join("|"),
+        RARITIES.join("|"),
+        "Energy|energy",
+        "\\((s|ALL|not random|does not Exhaust|Upgraded|X?\\+?\\d+)\\)"
+    ].join("|"),
     "g"
 );
 
@@ -116,6 +130,9 @@ const highlightKeywords = (text) => {
         if(matchText[0] === "(") {
             list.push("upgrade");
         }
+        else if(RARITIES.indexOf(matchText) !== -1) {
+            list.push(matchText.toLowerCase());
+        }
         res.push(makeElement("span", { classes: list }, matchText));
         lastIndex = match.index + matchText.length;
     }
@@ -125,21 +142,34 @@ const highlightKeywords = (text) => {
     return res;
 };
 
+const appendAll = (src, els) => {
+    for(let el of els) {
+        src.appendChild(el);
+    }
+};
+
 const formatResult = (entity) => {
     let c = BASE_CARD_RESULT.cloneNode(true);
-    c.querySelector(".name").textContent = entity.name;
-    c.querySelector(".energy").textContent = entity.energy;
-    for(let d of highlightKeywords(entity.description)) {
-        c.querySelector(".description").appendChild(d);
+    let name = c.querySelector(".name");
+    let energy = c.querySelector(".energy");
+    let description = c.querySelector(".description");
+    let rarity = c.querySelector(".rarity");
+    let type = c.querySelector(".type");
+    name.textContent = entity.name;
+    appendAll(description, highlightKeywords(entity.description));
+    if(entity.rarity !== null) {
+        appendAll(rarity, highlightKeywords(entity.rarity));
     }
-    c.querySelector(".rarity").textContent = entity.rarity;
-    c.querySelector(".type").textContent = entity.type;
+    type.textContent = entity.type;
+    
     let imthumb = c.querySelector("img.thumb");
     imthumb.src = "./res/min/" + entity.src;
     imthumb.width = 150;
     imthumb.title = "Internal id: " + entity.id;
+    
     let enicon = c.querySelector("img.energy-icon");
     if(entity.energy !== null) {
+        appendAll(energy, highlightKeywords(entity.energy));
         let path = getEnergyColor(entity.color);
         enicon.src = "./res/sym/" + path;
         enicon.width = 20;
@@ -147,12 +177,6 @@ const formatResult = (entity) => {
     return c;
 };
 
-const RARITIES = [
-    "Starter", "Common", "Uncommon", "Rare"
-];
-const TYPES = [
-    "Attack", "Skill", "Power", "Curse", "Status"
-];
 const getRarityIndex = (card) => RARITIES.indexOf(card.rarity);
 const getTypeIndex = (card) => TYPES.indexOf(card.type);
 
@@ -212,25 +236,23 @@ window.addEventListener("load", async function () {
         for(let h of sub.map(formatResult)) {
             output.appendChild(h);
         }
-        if(Search.Cache.length >= next) {
+        if(Search.Cache.length > Search.StartIndex) {
             showAllButton.textContent = "Show Rest (" + (Search.Cache.length - Search.StartIndex) + " more)";
             output.appendChild(showDialogue);
         }
     };
     const showAll = () => {
-        showDialogue.remove();
-        let sub = Search.Cache.slice(Search.StartIndex);
-        for(let h of sub.map(formatResult)) {
-            output.appendChild(h);
+        showMore();
+        if(Search.StartIndex < Search.Cache.length) {
+            requestAnimationFrame(showAll);
         }
-        Search.StartIndex = Search.Cache.length;
     };
     
     showMoreButton.addEventListener("click", showMore);
     showAllButton.addEventListener("click", showAll);
-    autoShowAll.addEventListener("change", function () {
-        if(this.checked) showAll();
-    });
+    // autoShowAll.addEventListener("change", function () {
+        // if(this.checked) showAll();
+    // });
     
     const onChange = function () {
         let results = filterDatabase(baseDb, { 
